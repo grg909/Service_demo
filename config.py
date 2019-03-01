@@ -19,3 +19,6 @@ class Config():
 
     # 每页数据列表长度
     POSTS_PER_PAGE = 5
+
+    # 语言支持
+    LANGUAGES = ['en','zh']
