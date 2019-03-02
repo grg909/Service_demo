@@ -1,2 +1,2 @@
-﻿使用autopep8，isort时注意，必须跳过__init__.py(类似功能模块),防止使得lazy 
+﻿使用autopep8，isort时注意，必须跳过__init__.py(类似配置功能模块), 防止格式处理使lazy 
 import失效，导致循环导入问题
