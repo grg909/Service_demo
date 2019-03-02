@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-03-01 21:42+0900\n"
+"POT-Creation-Date: 2019-03-02 21:38+0900\n"
 "PO-Revision-Date: 2019-03-01 20:45+0900\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh\n"
@@ -38,7 +38,7 @@ msgstr "密码"
 msgid "Remember Me"
 msgstr "记住登陆"
 
-#: app/forms.py:14 app/routes.py:60 app/templates/login.html:5
+#: app/forms.py:14 app/routes.py:81 app/templates/login.html:5
 msgid "Sign In"
 msgstr "登陆"
 
@@ -50,7 +50,7 @@ msgstr "邮箱"
 msgid "Repeat Password"
 msgstr "重置密码"
 
-#: app/forms.py:24 app/routes.py:81 app/templates/register.html:5
+#: app/forms.py:24 app/routes.py:102 app/templates/register.html:5
 msgid "Register"
 msgstr "注册"
 
@@ -78,21 +78,76 @@ msgstr "提交"
 msgid "Say something"
 msgstr "说些什么吧"
 
-#: app/routes.py:37 app/templates/base.html:21
+#: app/routes.py:37
+msgid "Your post is now live!"
+msgstr "哈哈，你的动态已经更新啦！"
+
+#: app/routes.py:46 app/templates/base.html:21
 msgid "Home"
 msgstr "首页"
 
-#: app/routes.py:126 app/templates/edit_profile.html:5
-msgid "Edit Profile"
-msgstr "编辑资料"
-
-#: app/routes.py:174 app/templates/base.html:22
+#: app/routes.py:61 app/templates/base.html:22
 msgid "Explore"
 msgstr "探索"
 
-#: app/routes.py:191 app/templates/reset_password_request.html:5
+#: app/routes.py:74
+msgid "Invalid username or password"
+msgstr "错误的用户名或者密码"
+
+#: app/routes.py:100
+msgid "Congratulations, you are now a registered user!"
+msgstr "祝贺，你已成功注册韦伯的账号！"
+
+#: app/routes.py:115
+msgid "Check your email for the instructions to reset your password"
+msgstr "检查你的邮箱，根据收到的邮件指导重置密码"
+
+#: app/routes.py:118 app/templates/reset_password_request.html:5
 msgid "Reset Password"
 msgstr "重置密码"
+
+#: app/routes.py:132
+msgid "Your password has been reset."
+msgstr "你的密码已经重置"
+
+#: app/routes.py:160
+msgid "Your changes have been saved."
+msgstr "你的更改已保存"
+
+#: app/routes.py:165 app/templates/edit_profile.html:5
+msgid "Edit Profile"
+msgstr "编辑资料"
+
+#: app/routes.py:174 app/routes.py:190
+#, python-format
+msgid "User %(username)s not found."
+msgstr "没有找到用户名 %(username)s"
+
+#: app/routes.py:177
+msgid "You cannot follow yourself!"
+msgstr "你不能关注自己！"
+
+#: app/routes.py:181
+#, python-format
+msgid "You are following %(username)s!"
+msgstr "你已关注%(username)s！"
+
+#: app/routes.py:193
+msgid "You cannot unfollow yourself!"
+msgstr "你不能取消关注自己！"
+
+#: app/routes.py:197
+#, python-format
+msgid "You are not following %(username)s."
+msgstr "你已经取消关注%(username)s"
+
+#: app/translate.py:9
+msgid "Error: the translation service is not configured."
+msgstr "错误：尚未配置翻译服务"
+
+#: app/translate.py:15
+msgid "Error: the translation service is unavailable"
+msgstr "错误：无法获取翻译服务"
 
 #: app/templates/404.html:4
 msgid "Not Found"
@@ -115,6 +170,10 @@ msgstr "已将错误汇报管理员，非常抱歉"
 msgid "%(username)s said %(when)s"
 msgstr "%(username)s 于 %(when)s 分享了"
 
+#: app/templates/_post.html:25
+msgid "Translate"
+msgstr "翻译"
+
 #: app/templates/base.html:4 app/templates/base.html:17
 msgid "Microblog"
 msgstr "韦伯"
@@ -134,6 +193,10 @@ msgstr "我的资料"
 #: app/templates/base.html:29
 msgid "Logout"
 msgstr "离开"
+
+#: app/templates/base.html:67
+msgid "Error: Could not contact server."
+msgstr "错误：无法连接服务器"
 
 #: app/templates/index.html:5
 #, python-format
@@ -162,7 +225,7 @@ msgstr "忘记密码了？"
 
 #: app/templates/login.html:15
 msgid "Click to Reset It"
-msgstr "点击重置密码！"
+msgstr "点击重置密码"
 
 #: app/templates/reset_password.html:5
 msgid "Reset Your Password"
