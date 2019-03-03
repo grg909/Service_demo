@@ -76,7 +76,7 @@ msgstr "提交"
 
 #: app/forms.py:68
 msgid "Say something"
-msgstr "说些什么吧"
+msgstr "说点什么吧"
 
 #: app/routes.py:37
 msgid "Your post is now live!"
@@ -237,17 +237,17 @@ msgstr "用户"
 
 #: app/templates/user.html:11
 msgid "Last seen on"
-msgstr "上一次见"
+msgstr "上一次出没"
 
 #: app/templates/user.html:13
 #, python-format
 msgid "%(count)d followers"
-msgstr "%(count)d 位粉丝"
+msgstr "粉丝 %(count)d 位"
 
 #: app/templates/user.html:13
 #, python-format
 msgid "%(count)d following"
-msgstr "关注了 %(count)d 位"
+msgstr "关注 %(count)d 位"
 
 #: app/templates/user.html:15
 msgid "Edit your profile"
