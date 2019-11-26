@@ -1,2 +1,1 @@
-# Flask_project
-use for tech demo
+# Service_demo
