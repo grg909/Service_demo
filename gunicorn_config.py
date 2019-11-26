@@ -18,7 +18,6 @@
 #       range.
 #
 
-bind = '0.0.0.0:7777'
 backlog = 2048
 
 #
@@ -68,7 +67,7 @@ backlog = 2048
 workers = 4
 worker_class = 'gevent'
 # threads = 1
-worker_connections = 2000
+worker_connections = 5000
 timeout = 30
 keepalive = 2
 
