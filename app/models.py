@@ -116,6 +116,11 @@ class User(UserMixin, db.Model):
     def get_task_in_progress(self):
         return Task.query.filter_by(user=self, complete=False).first()
 
+    def add_notification(self, name, data):
+        self.notifications.filter_by(name=name).delete()
+        n = Notification(name=name, payload_json=json.dumps(data), user=self)
+        db.session.add(n)
+        return n
 
 @login.user_loader
 def load_user(id):
@@ -149,7 +154,7 @@ class Task(db.Model):
     name = db.Column(db.String(128), index=True)
     description = db.Column(db.String(128))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    complete = db.Column(db.boolean, default=False)
+    complete = db.Column(db.Boolean, default=False)
 
     def get_rq_task(self):
         try:
@@ -163,7 +168,7 @@ class Task(db.Model):
         return job.meta.get('progress', 0) if job is not None else 100
 
 
-class Notificaion(db.Model):
+class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), index=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
