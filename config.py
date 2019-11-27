@@ -14,6 +14,7 @@ class Config():
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    REDIS_URL = os.environ.get('REDIS_URL') or 'redis://'
 
     # 邮件服务器配置
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
@@ -31,3 +32,7 @@ class Config():
     MS_TRANSLATOR_KEY = os.environ.get('MS_TRANSLATOR_KEY')
 
     LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')
+
+    # 消息队列
+    WORKER_NAME = 'grg909-task1'
+

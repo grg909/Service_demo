@@ -10,6 +10,8 @@ from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from flask_babel import Babel, lazy_gettext as _l
 from config import Config
+from redis import Redis
+import rq
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -33,6 +35,8 @@ def create_app(config_class=Config):
     bootstrap.init_app(app)
     moment.init_app(app)
     babel.init_app(app)
+    app.redis = Redis.from_url(app.config['REDIS_URL'])
+    app.task_queue = rq.Queue(app.config['WORKER_NAME'], connection=app.redis)
 
     from app.errors import bp as errors_bp
     app.register_blueprint(errors_bp)
