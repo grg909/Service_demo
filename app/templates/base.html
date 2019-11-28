@@ -1,4 +1,4 @@
-{% extends 'bootstrap/base.html' %}
+{% extends "origin.html" %}
 
 {% block head %}
 {{ super() }}
@@ -65,6 +65,15 @@
     </div>
 
 {% endblock %}
+
+
+{% block footer %}
+    <footer class="text-center">
+        <small> &copy; 2018 <a href="http://greyli.com" title="Written by Grey Li">Grey Li</a>
+        </small>
+    </footer>
+{% endblock %}
+
 
 {% block scripts %}
     {{ super() }}
