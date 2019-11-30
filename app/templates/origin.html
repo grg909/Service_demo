@@ -4,15 +4,16 @@
 {%- block html %}
   <head>
     {%- block head %}
-        <title>{% block title %}{{title|default}}{% endblock title %}</title>
 
     {%- block metas %}
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {%- endblock metas %}
+    
+    <title>{% block title %}{{title|default}}{% endblock title %}</title>
 
     {%- block styles %}
-    <!-- Bootstrap -->
+    <!-- Bootstrap CSS -->
     {{ bootstrap.load_css() }}
     {%- endblock styles %}
     {%- endblock head %}
@@ -28,7 +29,8 @@
     {%- endblock footer %}
 
     {% block scripts %}
-        {{ bootstrap.load_js() }}
+    <!-- Bootstrap JS -->
+    {{ bootstrap.load_js() }}
     {%- endblock scripts %}
     {%- endblock body %}
   </body>

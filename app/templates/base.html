@@ -14,14 +14,14 @@
 {% block navbar %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
             <a class="navbar-brand mb-0 h1" href="{{ url_for('main.index') }}">
                 <img src="{{ url_for('static', filename='favicon.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
                 {{ _('Microblog')  }}
             </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <div class="navbar-nav">
@@ -52,11 +52,16 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container">
+    <div class="container mt-3">
         {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
-            <div class="alert alert-info" role="alert">{{ message }}</div>
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
             {% endfor %}
         {% endif %}
         {% endwith %}
@@ -64,13 +69,12 @@
         {# application content needs to be provided in the app_content block #}
         {% block app_content %}{% endblock %}
     </div>
-
 {% endblock %}
 
 
 {% block footer %}
     <footer class="text-center">
-        <small> &copy; 2018 <a href="http://greyli.com" title="Written by Grey Li">Grey Li</a>
+        <small> &copy; 2019 <a href="https://github.com/grg909" title="Created by grg909">grg909</a>
         </small>
     </footer>
 {% endblock %}
@@ -96,6 +100,14 @@
         }
 
         $(function () {
+    		$.fn.popover.Constructor.Default.whiteList.table = [];
+    		$.fn.popover.Constructor.Default.whiteList.tr = [];
+    		$.fn.popover.Constructor.Default.whiteList.td = [];
+    		$.fn.popover.Constructor.Default.whiteList.th = [];
+    		$.fn.popover.Constructor.Default.whiteList.div = [];
+    		$.fn.popover.Constructor.Default.whiteList.tbody = [];
+    		$.fn.popover.Constructor.Default.whiteList.thead = [];
+
             var timer = null;
             var xhr = null;
             $('.user_popup').hover(
@@ -132,7 +144,7 @@
                         xhr = null;
                     }
                     else {
-                        elem.popover('destroy');
+                        elem.popover('dispose');
                     }
                 }
             );
