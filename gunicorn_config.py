@@ -64,7 +64,7 @@ backlog = 2048
 #       A positive integer. Generally set in the 1-5 seconds range.
 #
 
-workers = 4
+workers = 2
 worker_class = 'gevent'
 # threads = 1
 worker_connections = 5000
