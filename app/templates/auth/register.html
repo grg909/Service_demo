@@ -1,11 +1,12 @@
-{% extends "base.html" %}
+{% extends "auth/login.html" %}
 {% from 'bootstrap/form.html' import render_form, render_field, render_form_row %}
 
-{% block app_content %}
-    <h1>{{ _('Register') }}</h1>
+{% block login_form %}
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-9 col-lg-8 mx-auto">
+          <h3 class="login-heading mb-4">{{ _('Register') }}</h3>
             {{ render_form(form) }}
+                <br>
         </div>
     </div>
 {% endblock %}
