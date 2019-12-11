@@ -2,6 +2,7 @@ alembic==1.0.7
 autopep8==1.4.3
 Babel==2.6.0
 blinker==1.4
+Bootstrap-Flask==1.1.0
 certifi==2018.11.29
 chardet==3.0.4
 Click==7.0
@@ -26,6 +27,7 @@ Jinja2==2.10.3
 Mako==1.0.7
 MarkupSafe==1.1.0
 psycopg2==2.8.4
+pybase62==0.4.3
 pycodestyle==2.5.0
 PyJWT==1.7.1
 python-dateutil==2.8.0

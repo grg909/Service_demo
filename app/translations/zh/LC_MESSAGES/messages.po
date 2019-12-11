@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-11-27 23:57+0900\n"
+"POT-Creation-Date: 2019-12-10 05:31+0900\n"
 "PO-Revision-Date: 2019-03-01 20:45+0900\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh\n"
@@ -46,7 +46,7 @@ msgstr "密码"
 msgid "Remember Me"
 msgstr "记住登陆"
 
-#: app/auth/forms.py:14 app/auth/routes.py:29 app/templates/auth/login.html:5
+#: app/auth/forms.py:14 app/auth/routes.py:29
 msgid "Sign In"
 msgstr "登陆"
 
@@ -59,7 +59,7 @@ msgid "Repeat Password"
 msgstr "重置密码"
 
 #: app/auth/forms.py:24 app/auth/routes.py:50
-#: app/templates/auth/register.html:5
+#: app/templates/auth/register.html:7
 msgid "Register"
 msgstr "注册"
 
@@ -87,7 +87,7 @@ msgstr "祝贺，你已成功注册韦伯的账号！"
 msgid "Check your email for the instructions to reset your password"
 msgstr "检查你的邮箱，根据收到的邮件指导重置密码"
 
-#: app/auth/routes.py:67 app/templates/auth/reset_password_request.html:5
+#: app/auth/routes.py:67 app/templates/auth/reset_password_request.html:7
 msgid "Reset Password"
 msgstr "重置密码"
 
@@ -115,11 +115,11 @@ msgstr "消息"
 msgid "Your post is now live!"
 msgstr "哈哈，你的动态已经更新啦！"
 
-#: app/main/routes.py:46 app/templates/base.html:28
+#: app/main/routes.py:46 app/templates/base.html:35
 msgid "Home"
 msgstr "首页"
 
-#: app/main/routes.py:86 app/templates/base.html:29
+#: app/main/routes.py:86 app/templates/base.html:36
 msgid "Explore"
 msgstr "探索"
 
@@ -158,7 +158,7 @@ msgstr "你已经取消关注%(username)s"
 msgid "Your message has been sent."
 msgstr "消息已发送"
 
-#: app/main/routes.py:181
+#: app/main/routes.py:183
 msgid "Send Message"
 msgstr "发送消息"
 
@@ -171,31 +171,35 @@ msgstr "%(username)s 于 %(when)s 分享了"
 msgid "Translate"
 msgstr "翻译"
 
-#: app/templates/base.html:11 app/templates/base.html:24
+#: app/templates/auth/login.html:12 app/templates/base.html:11
+msgid "Weroo"
+msgstr ""
+
+#: app/templates/auth/login.html:12 app/templates/base.html:11
+msgid "Welcome to Weroo!"
+msgstr ""
+
+#: app/templates/base.html:26
 msgid "Microblog"
 msgstr "韦伯"
 
-#: app/templates/base.html:11
-msgid "Welcome to Microblog"
-msgstr "欢迎来到韦伯"
-
-#: app/templates/base.html:33
+#: app/templates/base.html:41
 msgid "Login"
 msgstr "登陆"
 
-#: app/templates/base.html:36 app/templates/messages.html:4
+#: app/templates/base.html:44 app/templates/messages.html:4
 msgid "Messages"
 msgstr "消息"
 
-#: app/templates/base.html:43
+#: app/templates/base.html:51
 msgid "Profile"
 msgstr "我的资料"
 
-#: app/templates/base.html:44
+#: app/templates/base.html:52
 msgid "Logout"
 msgstr "离开"
 
-#: app/templates/base.html:84
+#: app/templates/base.html:174
 msgid "Error: Could not contact server."
 msgstr "错误：无法连接服务器"
 
@@ -204,21 +208,15 @@ msgstr "错误：无法连接服务器"
 msgid "Hi, %(username)s!"
 msgstr "你好, %(username)s!"
 
-#: app/templates/index.html:17 app/templates/user.html:39
+#: app/templates/index.html:17 app/templates/messages.html:12
+#: app/templates/user.html:39
 msgid "Newer posts"
 msgstr "上一页"
 
-#: app/templates/index.html:22 app/templates/user.html:44
+#: app/templates/index.html:22 app/templates/messages.html:17
+#: app/templates/user.html:44
 msgid "Older posts"
 msgstr "下一页"
-
-#: app/templates/messages.html:12
-msgid "Newer messages"
-msgstr "下一页"
-
-#: app/templates/messages.html:17
-msgid "Older messages"
-msgstr "上一页"
 
 #: app/templates/send_message.html:5
 #, python-format
@@ -259,23 +257,23 @@ msgstr "取消关注"
 msgid "Send private message"
 msgstr "发送私信"
 
-#: app/templates/auth/login.html:12
+#: app/templates/auth/login.html:50
 msgid "New User?"
 msgstr "新用户？"
 
-#: app/templates/auth/login.html:12
+#: app/templates/auth/login.html:50
 msgid "Click to Register!"
 msgstr "点击注册！"
 
-#: app/templates/auth/login.html:14
+#: app/templates/auth/login.html:52
 msgid "Forgot Your Password?"
 msgstr "忘记密码了？"
 
-#: app/templates/auth/login.html:15
+#: app/templates/auth/login.html:53
 msgid "Click to Reset It"
 msgstr "点击重置密码"
 
-#: app/templates/auth/reset_password.html:5
+#: app/templates/auth/reset_password.html:8
 msgid "Reset Your Password"
 msgstr "重置你的密码"
 
@@ -297,4 +295,13 @@ msgstr "已将错误汇报管理员，非常抱歉"
 
 #~ msgid "Error: the translation service is unavailable"
 #~ msgstr "错误：无法获取翻译服务"
+
+#~ msgid "Welcome to Microblog"
+#~ msgstr "欢迎来到韦伯"
+
+#~ msgid "Newer messages"
+#~ msgstr "下一页"
+
+#~ msgid "Older messages"
+#~ msgstr "上一页"
 
