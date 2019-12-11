@@ -22,7 +22,7 @@ class Config():
     MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS') is not None
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    ADMINS = ['grg517076867@gamil.com', 'grg909@foxmail.com']
+    ADMINS = os.environ.get('MAIL_ADMINS')
 
     # 每页数据列表长度
     POSTS_PER_PAGE = 5
@@ -31,8 +31,14 @@ class Config():
     LANGUAGES = ['en', 'zh']
     MS_TRANSLATOR_KEY = os.environ.get('MS_TRANSLATOR_KEY')
 
+    # Heroku log
     LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')
 
     # 消息队列
     WORKER_NAME = 'grg909-task1'
+
+    # Tiny url service
+    ERVER_URL_PREFIX = os.getenv("SERVER_URL_PREFIX", "[Put your IP/domain name Here]")
+    MAX_URL_LEN = int(os.getenv("MAX_URL_LEN", "2000"))
+    DB_EXPIRE_TIME = int(os.getenv("DB_EXPIRE_TIME", "31536000"))
 

@@ -8,20 +8,19 @@
 
 """
 
-from flask import current_app
+from flask import current_app as app
 
-import redis
 import urllib.parse as parse
-import hashlib
+import mmh3
 import base62
 
 
 def short(url):
-    return base62.encodebytes(hashlib.md5(url).digest()[-4:])
+    return base62.encode(mmh3.hash(url, True))
 
 
 def check_url_avail(url):
-    if len(url) > current_app.config['MAX_URL_LEN']:
+    if len(url) > app.config['MAX_URL_LEN']:
         return {
             "State": "Failed",
             "Error_msg": "Please don't use url longer than 2000 character."
@@ -41,39 +40,39 @@ def check_url_loop(url_key, url):
     # avoid make a tiny url directed to it self
     parsed_url = parse.urlparse(url.decode())
     url_path = parsed_url.path.replace("/", "")
-    server_domain = parse.urlparse(
-        current_app.config['SERVER_URL_PREFIX']).netloc
+    server_domain = parse.urlparse(app.config['SERVER_URL_PREFIX']).netloc
     if server_domain == parsed_url.netloc and url_path == url_key:
         return {
             "State":
                 "Failed",
             "Error_msg":
                 "This url %s will redirect to same page" %
-                (current_app.config['SERVER_URL_PREFIX'] + url_key)
+                (app.config['SERVER_URL_PREFIX'] + url_key)
         }
     return {"State": "Success"}
 
 
 class urlShorter:
 
-    def __init__(self):
-        self.db = redis.Redis(host=current_app.config['REDIS_URL'],
-                              db=0,
-                              decode_responses=True)
-
     def decode(self, short_key):
-        return self.db.get(short_key)
+        return app.redis.get(short_key)
 
     def set_db(self, url_key, long_url):
         try:
-            self.db.set(url_key, long_url)
-        except Exception as e:
-            raise RuntimeError("Redis set data error", e)
+            app.redis.set(url_key, long_url)
+            return {"State": "Success"}
+        except:
+            return {"State": "Failed", "Error_msg": "Insert to database failed"}
 
     def encode_ran_key(self, long_url):
         url_key = short(long_url)
 
-        return self.set_db(url_key, long_url)
+        set_res = self.set_db(url_key, long_url)
+        if set_res["State"] != "Success":
+            return set_res
+
+        return {"State": "Sucess",
+                "short_url": "%s/%s" % (app.config['SERVER_URL_PREFIX'], url_key)}
 
     def encode_spec_key(self, spec_key, long_url):
 
@@ -97,5 +96,7 @@ class urlShorter:
             if set_res["State"] != "Success":
                 return set_res
 
-        return {"State": "Success",
-                "short_url": "%s/%s" % (current_app.config['SERVER_URL_PREFIX'], spec_key)}
+        return {
+            "State": "Success",
+            "short_url": "%s/%s" % (app.config['SERVER_URL_PREFIX'], spec_key)
+        }

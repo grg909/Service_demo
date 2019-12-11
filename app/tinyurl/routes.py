@@ -35,7 +35,7 @@ def specify_url_key(specify_key):
     if chk_url_res["State"] != "Success":
         return jsonify(chk_url_res)
 
-    result = shorter.encode_spec_key(url, specify_key)
+    result = shorter.encode_spec_key(specify_key, url)
     if result["State"] != "Success":
         return jsonify(result), 400
     return jsonify(result), 200
