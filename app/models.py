@@ -177,3 +177,8 @@ class Notification(db.Model):
 
     def get_data(self):
         return json.loads(str(self.payload_json))
+
+
+class Tinyurl(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    long_url = db.Column(db.Text)
