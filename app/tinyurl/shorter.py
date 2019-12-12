@@ -10,14 +10,17 @@
 
 from flask import current_app as app
 
-import redis
 import urllib.parse as parse
-import hashlib
+from app import db
 import base62
 
+from app.models import Tinyurl
 
-def short(url):
-    return base62.encodebytes(hashlib.md5(url).digest()[-4:])
+
+def valid_key(key):
+    if key.isalnum():
+        return True
+    return False
 
 
 def check_url_avail(url):
@@ -53,51 +56,43 @@ def check_url_loop(url_key, url):
     return {"State": "Success"}
 
 
-class urlShorter:
+def encode_ran_key(url):
+    url_key = app.redis.get(url)
+    if not url_key:
+        tinyurl = Tinyurl(long_url=url)
+        db.session.add(tinyurl)
+        db.session.commit()
+        url_key = base62.encode(int(tinyurl.id))
+        app.redis.set(url, url_key, ex=86400, nx=True)
 
-    def decode(self, short_key):
-        return app.redis.get(short_key)
+    return {
+        "State": "Sucess",
+        "short_url": "%s/%s" % (app.config['SERVER_URL_PREFIX'], url_key)
+    }
 
-    def set_db(self, url_key, long_url):
-        try:
-            app.redis.set(url_key, long_url)
-            return {"State": "Success"}
-        except:
-            return {"State": "Failed", "Error_msg": "Insert to database failed"}
-
-    def encode_ran_key(self, long_url):
-        url_key = short(long_url)
-
-        set_res = self.set_db(url_key, long_url)
-        if set_res["State"] != "Success":
-            return set_res
-
-        return {"State": "Sucess",
-                "short_url": "%s/%s" % (app.config['SERVER_URL_PREFIX'], url_key)}
-
-    def encode_spec_key(self, spec_key, long_url):
-
-        chk_loop_res = check_url_loop(spec_key, long_url)
-        if chk_loop_res["State"] != "Success":
-            return chk_loop_res
-
-        # Check if the given key has been used
-        get_res = self.decode(spec_key)
-        if get_res is not None:
-            # Given key has been used, check if the key has same url
-            if get_res != long_url:
-                # Not same, generate another key for it.
-                res = self.encode_ran_key(long_url)
-                res["Info"] = "The given key %s is not avaiable, but we generate another usable key for you." % (
-                    spec_key)
-                return res
-        else:
-            # Given key hasn't been used, insert it.
-            set_res = self.set_db(spec_key, long_url)
-            if set_res["State"] != "Success":
-                return set_res
-
-        return {
-            "State": "Success",
-            "short_url": "%s/%s" % (app.config['SERVER_URL_PREFIX'], spec_key)
-        }
+# def encode_spec_key(spec_key, long_url):
+#
+#     chk_loop_res = check_url_loop(spec_key, long_url)
+#     if chk_loop_res["State"] != "Success":
+#         return chk_loop_res
+#
+#     # Check if the given key has been used
+#     get_res = self.decode(spec_key)
+#     if get_res is not None:
+#         # Given key has been used, check if the key has same url
+#         if get_res != long_url:
+#             # Not same, generate another key for it.
+#             res = encode_ran_key(long_url)
+#             res["Info"] = "The given key %s is not avaiable, but we generate another usable key for you." % (
+#                 spec_key)
+#             return res
+#     else:
+#         # Given key hasn't been used, insert it.
+#         set_res = self.set_db(spec_key, long_url)
+#         if set_res["State"] != "Success":
+#             return set_res
+#
+#     return {
+#         "State": "Success",
+#         "short_url": "%s/%s" % (app.config['SERVER_URL_PREFIX'], spec_key)
+#     }

@@ -1,29 +1,37 @@
-{% extends "origin.html" %}
+{% extends "template.html" %}
 
 {% block head %}
-{{ super() }}
-{% block favicon %}
-<link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
-{% endblock %}
-{% endblock %}
-
-{% block title %}
-{% if title %}{{ title }} - {{ _('Weroo') }}{% else %}{{ _('Welcome to Weroo!') }}{% endif %}
+    {{ super() }}
+    {% block favicon %}
+        <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    {% endblock %}
 {% endblock %}
 
 {%- block styles %}
+<!-- Bootstrap CSS -->
     {{ super() }}
-    <link href="{{ url_for('static', filename='blog-post.css')  }}" rel="stylesheet">
+    <!-- Custom fonts for this template -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{{ url_for('static', filename='landing-page.css') }}" rel="stylesheet">
 {%- endblock styles %}
 
-{% block body_attribs %} class="d-flex flex-column h-100" {% endblock body_attribs %}
+{% block title %}
+    {% if title %}{{ title }} - {{ _('Weo') }}{% else %}{{ _('Welcome to Weo!') }}{% endif %}
+{% endblock %}
+
+{% block html_attribs %} style="height: 100%;" {% endblock html_attribs %}
+
+{% block body_attribs %} class="d-flex flex-column h-100" style="padding-top: 56px;" {% endblock body_attribs %}
 
 {% block navbar %}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div class="container">
             <a class="navbar-brand mb-0 h1" href="{{ url_for('main.index') }}">
-                <img src="{{ url_for('static', filename='favicon.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
-                {{ _('Weroo')  }}
+                <img src="{{ url_for('static', filename='favicon.png') }}" width="30" height="30"
+                     class="d-inline-block align-top" alt="">
+                {{ _('Weo') }}
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,7 +41,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <div class="navbar-nav">
                     <a class="nav-item nav-link" href="{{ url_for('main.index') }}">{{ _('Home') }}</a>
-                    <a class="nav-item nav-link"  href="{{ url_for('main.explore') }}">{{ _('Explore') }}</a>
+                    <a class="nav-item nav-link" href="{{ url_for('main.explore') }}">{{ _('Explore') }}</a>
                 </div>
 
                 <div class="navbar-nav ml-auto">
@@ -48,7 +56,8 @@
                                 {% else %}hidden {% endif %}">{{ new_messages }}</span>
                             {% endif %}
                         </a>
-                        <a class="nav-item nav-link" href="{{ url_for('main.user', username=current_user.username) }}">{{ _('Profile') }}</a>
+                        <a class="nav-item nav-link"
+                           href="{{ url_for('main.user', username=current_user.username) }}">{{ _('Profile') }}</a>
                         <a class="nav-item nav-link" href="{{ url_for('auth.logout') }}">{{ _('Logout') }}</a>
                     {% endif %}
 
@@ -85,58 +94,59 @@
 
                 <!-- Search Widget -->
                 <div class="card my-4">
-                  <h5 class="card-header">Search</h5>
-                  <div class="card-body">
-                    <div class="input-group">
-                      <input type="text" class="form-control" placeholder="Search for...">
-                      <span class="input-group-btn">
+                    <h5 class="card-header">Search</h5>
+                    <div class="card-body">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search for...">
+                            <span class="input-group-btn">
                         <button class="btn btn-secondary" type="button">Go!</button>
                       </span>
+                        </div>
                     </div>
-                  </div>
                 </div>
 
                 <!-- Categories Widget -->
                 <div class="card my-4 d-none d-lg-block">
-                  <h5 class="card-header">Categories</h5>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-lg-6">
-                        <ul class="list-unstyled mb-0">
-                          <li>
-                            <a href="#">Web Design</a>
-                          </li>
-                          <li>
-                            <a href="#">HTML</a>
-                          </li>
-                          <li>
-                            <a href="#">Freebies</a>
-                          </li>
-                        </ul>
-                      </div>
-                      <div class="col-lg-6">
-                        <ul class="list-unstyled mb-0">
-                          <li>
-                            <a href="#">JavaScript</a>
-                          </li>
-                          <li>
-                            <a href="#">CSS</a>
-                          </li>
-                          <li>
-                            <a href="#">Tutorials</a>
-                          </li>
-                        </ul>
-                      </div>
+                    <h5 class="card-header">Categories</h5>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <ul class="list-unstyled mb-0">
+                                    <li>
+                                        <a href="#">Web Design</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">HTML</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Freebies</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-6">
+                                <ul class="list-unstyled mb-0">
+                                    <li>
+                                        <a href="#">JavaScript</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">CSS</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Tutorials</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </div>
 
                 <!-- Side Widget -->
                 <div class="card my-4 d-none d-lg-block">
-                  <h5 class="card-header">Side Widget</h5>
-                  <div class="card-body">
-                    You can put anything you want inside of these side widgets. They are easy to use, and feature the new Bootstrap 4 card containers!
-                  </div>
+                    <h5 class="card-header">Side Widget</h5>
+                    <div class="card-body">
+                        You can put anything you want inside of these side widgets. They are easy to use, and feature
+                        the new Bootstrap 4 card containers!
+                    </div>
                 </div>
 
             </div>
@@ -148,9 +158,41 @@
 
 
 {% block footer %}
-    <footer class="footer font-small mt-auto">
-        <div class="footer-copyright text-center py-3">&copy 2019 Copyright:
-            <a href="https://github.com/grg909">grg909 </a>
+    <footer class="footer bg-light mt-auto">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 h-100 text-center text-lg-left my-auto">
+                    <ul class="list-inline mb-2">
+                        <li class="list-inline-item">
+                            <a href="#">About</a>
+                        </li>
+                        <li class="list-inline-item">&sdot;</li>
+                        <li class="list-inline-item">
+                            <a href="https://github.com/grg909">Contact</a>
+                        </li>
+                    </ul>
+                    <p class="text-muted small mb-4 mb-lg-0">&copy; grg909's Website 2019. All Rights Reserved.</p>
+                </div>
+                <div class="col-lg-6 h-100 text-center text-lg-right my-auto">
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item mr-3">
+                            <a href="#">
+                                <i class="fab fa-facebook fa-2x fa-fw"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item mr-3">
+                            <a href="#">
+                                <i class="fab fa-twitter-square fa-2x fa-fw"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#">
+                                <i class="fab fa-instagram fa-2x fa-fw"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </footer>
 {% endblock %}
@@ -168,84 +210,82 @@
                 text: $(sourceElem).text(),
                 source_language: sourceLang,
                 dest_language: destLang
-            }).done(function(response) {
+            }).done(function (response) {
                 $(destElem).text(response['text'])
-            }).fail(function() {
+            }).fail(function () {
                 $(destElem).text("{{ _('Error: Could not contact server.') }}");
             });
         }
 
         $(function () {
-    		$.fn.popover.Constructor.Default.whiteList.table = [];
-    		$.fn.popover.Constructor.Default.whiteList.tr = [];
-    		$.fn.popover.Constructor.Default.whiteList.td = [];
-    		$.fn.popover.Constructor.Default.whiteList.th = [];
-    		$.fn.popover.Constructor.Default.whiteList.div = [];
-    		$.fn.popover.Constructor.Default.whiteList.tbody = [];
-    		$.fn.popover.Constructor.Default.whiteList.thead = [];
+            $.fn.popover.Constructor.Default.whiteList.table = [];
+            $.fn.popover.Constructor.Default.whiteList.tr = [];
+            $.fn.popover.Constructor.Default.whiteList.td = [];
+            $.fn.popover.Constructor.Default.whiteList.th = [];
+            $.fn.popover.Constructor.Default.whiteList.div = [];
+            $.fn.popover.Constructor.Default.whiteList.tbody = [];
+            $.fn.popover.Constructor.Default.whiteList.thead = [];
 
             var timer = null;
             var xhr = null;
             $('.user_popup').hover(
-                function(event) {
+                function (event) {
                     // mouse in event handler
                     var elem = $(event.currentTarget);
-                    timer = setTimeout(function() {
+                    timer = setTimeout(function () {
                         timer = null;
                         xhr = $.ajax(
                             '/user/' + elem.first().text().trim() + '/popup').done(
-                                function(data) {
-                                    xhr = null;
-                                    elem.popover({
-                                        trigger: 'manual',
-                                        html: true,
-                                        animation: false,
-                                        container: elem,
-                                        content: data
-                                    }).popover('show');
-                                    flask_moment_render_all();
-                                }
-                            );
+                            function (data) {
+                                xhr = null;
+                                elem.popover({
+                                    trigger: 'manual',
+                                    html: true,
+                                    animation: false,
+                                    container: elem,
+                                    content: data
+                                }).popover('show');
+                                flask_moment_render_all();
+                            }
+                        );
                     }, 500);
                 },
-                function(event) {
+                function (event) {
                     // mouse out event handler
                     var elem = $(event.currentTarget);
                     if (timer) {
                         clearTimeout(timer);
                         timer = null;
-                    }
-                    else if (xhr) {
+                    } else if (xhr) {
                         xhr.abort();
                         xhr = null;
-                    }
-                    else {
+                    } else {
                         elem.popover('dispose');
                     }
                 }
             );
         });
 
-        function set_message_count(n){
+        function set_message_count(n) {
             $('#message_count').text(n);
             $('#message_count').css('visibility', n ? 'visible' : 'hidden');
         }
 
         {% if current_user.is_authenticated %}
-        $(function() {
-            var since = 0;
-            setInterval(function() {
-                $.ajax('{{ url_for('main.notifications') }}?since=' + since).done(
-                    function(notifications) {
-                        for (var i = 0; i < notifications.length; i++) {
-                            if (notifications[i].name == 'unread_message_count')
-                                set_message_count(notifications[i].data);
-                            since = notifications[i].timestamp;
+            $(function () {
+                var since = 0;
+                setInterval(function () {
+                    $.ajax('{{ url_for('main.notifications') }}?since=' + since).done(
+                        function (notifications) {
+                            for (var i = 0; i < notifications.length; i++) {
+                                if (notifications[i].name == 'unread_message_count')
+                                    set_message_count(notifications[i].data);
+                                since = notifications[i].timestamp;
+                            }
                         }
-                    }
-                );
-            }, 10000);
-        });
+                    );
+                }, 10000);
+            });
         {% endif %}
     </script>
 
