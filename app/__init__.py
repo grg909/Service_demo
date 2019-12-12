@@ -9,8 +9,9 @@ from flask_mail import Mail
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from flask_babel import Babel, lazy_gettext as _l
+from .cache import cache
 from config import Config
-from redis import Redis
+import redis
 import rq
 
 db = SQLAlchemy()
@@ -22,7 +23,7 @@ mail = Mail()
 bootstrap = Bootstrap()
 moment = Moment()
 babel = Babel()
-
+pool = redis.ConnectionPool(decode_responses=True)
 
 def create_app(config_class=Config):
     app = Flask(__name__)
@@ -35,7 +36,9 @@ def create_app(config_class=Config):
     bootstrap.init_app(app)
     moment.init_app(app)
     babel.init_app(app)
-    app.redis = Redis.from_url(app.config['REDIS_URL'])
+    cache.init_app(app, config=app.config['CACHE_CONFIG'])
+    pool.from_url(app.config['REDIS_URL'])
+    app.redis = redis.Redis(connection_pool=pool)
     app.task_queue = rq.Queue(app.config['WORKER_NAME'], connection=app.redis)
 
     from app.errors import bp as errors_bp
@@ -48,7 +51,7 @@ def create_app(config_class=Config):
     app.register_blueprint(main_bp)
 
     from app.tinyurl import bp as tinyurl_bp
-    app.register_blueprint(tinyurl_bp, url_prefix='/tiny')
+    app.register_blueprint(tinyurl_bp)
 
     if not app.debug and not app.testing:
         if app.config['MAIL_SERVER']:
