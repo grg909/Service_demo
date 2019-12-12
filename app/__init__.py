@@ -11,7 +11,7 @@ from flask_moment import Moment
 from flask_babel import Babel, lazy_gettext as _l
 from .cache import cache
 from config import Config
-import redis
+from redis import Redis
 import rq
 
 db = SQLAlchemy()
@@ -23,7 +23,6 @@ mail = Mail()
 bootstrap = Bootstrap()
 moment = Moment()
 babel = Babel()
-pool = redis.ConnectionPool(decode_responses=True)
 
 def create_app(config_class=Config):
     app = Flask(__name__)
@@ -37,8 +36,7 @@ def create_app(config_class=Config):
     moment.init_app(app)
     babel.init_app(app)
     cache.init_app(app, config=app.config['CACHE_CONFIG'])
-    pool.from_url(app.config['REDIS_URL'])
-    app.redis = redis.Redis(connection_pool=pool)
+    app.redis = Redis.from_url(app.config['REDIS_URL'])
     app.task_queue = rq.Queue(app.config['WORKER_NAME'], connection=app.redis)
 
     from app.errors import bp as errors_bp
