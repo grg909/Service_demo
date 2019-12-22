@@ -1,0 +1,29 @@
+{% extends "tinyurl.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block body_attribs %} class="customize"{% endblock body_attribs %}
+
+{% block url_form %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-9 mx-auto">
+                <h1 class="mb-5 display-1">{{ _('Congrats, here’s your link!') }}</h1>
+            </div>
+            <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Recipient's username"
+                           aria-label="Recipient's username" aria-describedby="button-addon2" value="{{ tiny_url }}">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary active" type="button"
+                                id="button-addon2">{{ _('Copy') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+                <a class="btn btn-secondary btn-lg" href="{{ url_for('tinyurl.specify') }}" role="button">Link</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
