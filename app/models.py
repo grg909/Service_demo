@@ -13,10 +13,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from app import db, login
 
 followers = db.Table(
-    'followers',
-    db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
-    db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
-)
+    'followers', db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('followed_id', db.Integer, db.ForeignKey('user.id')))
 
 
 class User(UserMixin, db.Model):
@@ -28,23 +26,24 @@ class User(UserMixin, db.Model):
     tasks = db.relationship('Task', backref='user', lazy='dynamic')
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
-    followed = db.relationship(
-        'User', secondary=followers,
-        primaryjoin=(followers.c.follower_id == id),
-        secondaryjoin=(followers.c.followed_id == id),
-        backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
-    messages_sent = db.relationship(
-        'Message',
-        foreign_keys='Message.sender_id',
-        backref='author',
-        lazy='dynamic')
-    messages_received = db.relationship(
-        'Message',
-        foreign_keys='Message.recipient_id',
-        backref='recipient',
-        lazy='dynamic')
+    followed = db.relationship('User',
+                               secondary=followers,
+                               primaryjoin=(followers.c.follower_id == id),
+                               secondaryjoin=(followers.c.followed_id == id),
+                               backref=db.backref('followers', lazy='dynamic'),
+                               lazy='dynamic')
+    messages_sent = db.relationship('Message',
+                                    foreign_keys='Message.sender_id',
+                                    backref='author',
+                                    lazy='dynamic')
+    messages_received = db.relationship('Message',
+                                        foreign_keys='Message.recipient_id',
+                                        backref='recipient',
+                                        lazy='dynamic')
     last_message_read_time = db.Column(db.DateTime)
-    notifications = db.relationship('Notification', backref='user', lazy='dynamic')
+    notifications = db.relationship('Notification',
+                                    backref='user',
+                                    lazy='dynamic')
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -81,14 +80,18 @@ class User(UserMixin, db.Model):
 
     def get_reset_password_token(self, expires_in=600):
         return jwt.encode(
-            {'reset_password': self.id, 'exp': time() + expires_in},
+            {
+                'reset_password': self.id,
+                'exp': time() + expires_in
+            },
             current_app.config['SECRET_KEY'],
             algorithm='HS256').decode('utf-8')
 
     @staticmethod
     def verify_reset_password_token(token):
         try:
-            id = jwt.decode(token, current_app.config['SECRET_KEY'],
+            id = jwt.decode(token,
+                            current_app.config['SECRET_KEY'],
                             algorithms=['HS256'])['reset_password']
         except BaseException:
             return
@@ -100,13 +103,12 @@ class User(UserMixin, db.Model):
             Message.timestamp > last_read_time).count()
 
     def launch_task(self, name, description, *args, **kwargs):
-        rq_job = current_app.task_queue.enqueue(
-            'app.tasks.' + name, self.id, *args, **args)
-        task = Task(
-            id=rq_job.get_id(),
-            name=name,
-            description=description,
-            user=self)
+        rq_job = current_app.task_queue.enqueue('app.tasks.' + name, self.id,
+                                                *args, **args)
+        task = Task(id=rq_job.get_id(),
+                    name=name,
+                    description=description,
+                    user=self)
         db.session.add(task)
         return task
 
@@ -121,6 +123,7 @@ class User(UserMixin, db.Model):
         n = Notification(name=name, payload_json=json.dumps(data), user=self)
         db.session.add(n)
         return n
+
 
 @login.user_loader
 def load_user(id):
@@ -182,3 +185,6 @@ class Notification(db.Model):
 class Tinyurl(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     long_url = db.Column(db.Text)
+    url_key = db.Column(db.String(10), index=True)
+    type = db.Column(db.String(10), default='system')
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
