@@ -36,8 +36,7 @@ def create_app(config_class=Config):
     moment.init_app(app)
     babel.init_app(app)
     cache.init_app(app, config=app.config['CACHE_CONFIG'])
-    app.redis = StrictRedis(decode_responses=True)
-    app.redis.from_url(app.config['REDIS_URL'])
+    app.redis = StrictRedis(decode_responses=True).from_url(app.config['REDIS_URL'])
     app.task_queue = rq.Queue(app.config['WORKER_NAME'], connection=app.redis)
 
     from app.errors import bp as errors_bp
