@@ -42,6 +42,7 @@ class Config():
                                   "[Put your IP/domain name Here]")
     MAX_URL_LEN = int(os.getenv("MAX_URL_LEN", "200"))
     DB_EXPIRE_TIME = int(os.getenv("DB_EXPIRE_TIME", "31536000"))
+    BASE62_CHARSET = os.getenv("BASE62_CHARSET", 'iPFJm70Hxb58t2qSsDhpeCULjIY43QrkTw96lWNZoBOKVXRgaMG1nfuEyvAczd')
 
     CACHE_CONFIG = {
         'CACHE_TYPE': 'redis',

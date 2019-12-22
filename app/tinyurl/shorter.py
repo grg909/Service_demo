@@ -10,89 +10,66 @@
 
 from flask import current_app as app
 
-import urllib.parse as parse
 from app import db
-import base62
+from base62 import encode, decode
 
 from app.models import Tinyurl
 
 
-def valid_key(key):
-    if key.isalnum():
-        return True
-    return False
+def decoder(url_key):
+    return decode(url_key, charset=app.config['BASE62_CHARSET'])
 
 
-def check_url_avail(url):
-    if len(url) > app.config['MAX_URL_LEN']:
-        return {
-            "State": "Failed",
-            "Error_msg": "Please don't use url longer than 2000 character."
-        }
-    parsed_url = parse.urlparse(url.decode())
-    if parsed_url.scheme == '':
-        return {
-            "State":
-                "Failed",
-            "Error_msg":
-                "Please use correct protocol such as 'http', 'https' or 'ftp'."
-        }
-    return {"State": "Success"}
+# 每次生成
+def check_set_key(url_key):
+    used = Tinyurl.query.filter_by(url_key=url_key).first()
+    if used and used.type == 'customize':
+        return encode(int(used.id), charset=app.config['BASE62_CHARSET'])
+    else:
+        return url_key
 
 
-def check_url_loop(url_key, url):
-    # avoid make a tiny url directed to it self
-    parsed_url = parse.urlparse(url.decode())
-    url_path = parsed_url.path.replace("/", "")
-    server_domain = parse.urlparse(app.config['SERVER_URL_PREFIX']).netloc
-    if server_domain == parsed_url.netloc and url_path == url_key:
-        return {
-            "State":
-                "Failed",
-            "Error_msg":
-                "This url %s will redirect to same page" %
-                (app.config['SERVER_URL_PREFIX'] + url_key)
-        }
-    return {"State": "Success"}
-
-
-def encode_ran_key(url):
-    url_key = app.redis.get(url)
+def encode_ran_key(long_url):
+    url_key = app.redis.get(long_url)
     if not url_key:
-        tinyurl = Tinyurl(long_url=url)
+        tinyurl = Tinyurl(long_url=long_url)
         db.session.add(tinyurl)
         db.session.commit()
-        url_key = base62.encode(int(tinyurl.id))
-        app.redis.set(url, url_key, ex=86400, nx=True)
+        url_key = encode(int(tinyurl.id), charset=app.config['BASE62_CHARSET'])
+        tinyurl.url_key = check_set_key(url_key)
+        db.session.commit()
+        app.redis.set(long_url, tinyurl.url_key, ex=86400, nx=True)
 
-    return {
-        "State": "Sucess",
-        "short_url": "%s/%s" % (app.config['SERVER_URL_PREFIX'], url_key)
-    }
+    return '{}/{}'.format(app.config['SERVER_URL_PREFIX'], url_key)
 
-# def encode_spec_key(spec_key, long_url):
-#
-#     chk_loop_res = check_url_loop(spec_key, long_url)
-#     if chk_loop_res["State"] != "Success":
-#         return chk_loop_res
-#
-#     # Check if the given key has been used
-#     get_res = self.decode(spec_key)
-#     if get_res is not None:
-#         # Given key has been used, check if the key has same url
-#         if get_res != long_url:
-#             # Not same, generate another key for it.
-#             res = encode_ran_key(long_url)
-#             res["Info"] = "The given key %s is not avaiable, but we generate another usable key for you." % (
-#                 spec_key)
-#             return res
-#     else:
-#         # Given key hasn't been used, insert it.
-#         set_res = self.set_db(spec_key, long_url)
-#         if set_res["State"] != "Success":
-#             return set_res
-#
-#     return {
-#         "State": "Success",
-#         "short_url": "%s/%s" % (app.config['SERVER_URL_PREFIX'], spec_key)
-#     }
+
+def get_exited_key(long_url):
+    url_key = app.redis.get(long_url)
+    if url_key:
+        return url_key
+    else:
+        tinyurl = Tinyurl.query.filter_by(long_url=url_key).first()
+        return tinyurl.url_key if tinyurl else None
+
+
+def encode_spec_key(long_url, spec_key):
+    url_key = get_exited_key(long_url)
+    spec_id = decoder(spec_key)
+    if url_key:
+        decode_id = decoder(url_key)
+        tinyurl = Tinyurl.query.get(decode_id)
+    else:
+        tinyurl = Tinyurl(long_url=long_url)
+        db.session.add(tinyurl)
+        db.session.commit()
+
+    if spec_id < tinyurl.id:
+        return 'Sorry, this tiny url is not available anymore, please try another'
+    elif spec_id == tinyurl.id:
+        return 'keep use it'
+    else:
+        tinyurl.type = 'customize'
+        tinyurl.url_key = spec_key
+        db.session.commit()
+
+    return '{}/{}'.format(app.config['SERVER_URL_PREFIX'], spec_key)
