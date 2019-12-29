@@ -5,25 +5,49 @@
 {% block body_attribs %} class="customize"{% endblock body_attribs %}
 
 {% block url_form %}
-    <div class="container">
+    <div class="container" style="height:220px">
         <div class="row">
             <div class="col-xl-9 mx-auto">
                 <h1 class="mb-5 display-1">{{ _('Congrats, here’s your link!') }}</h1>
             </div>
             <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Recipient's username"
-                           aria-label="Recipient's username" aria-describedby="button-addon2" value="{{ tiny_url }}">
+                    <input type="text" class="form-control form-control-lg" aria-describedby="button-addon2"
+                           value="{{ tiny_url }}" id="gen_url">
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary active" type="button"
-                                id="button-addon2">{{ _('Copy') }}
+                                id="button-addon2" onclick="copyFunc()">{{ _('Copy') }}
                         </button>
                     </div>
                 </div>
             </div>
             <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
-                <a class="btn btn-secondary btn-lg" href="{{ url_for('tinyurl.specify') }}" role="button">Link</a>
+                If you don’t like it, you can customize your link !
+            </div>
+            <div class="col-md-10 col-lg-8 col-xl-7 mx-auto mt-2">
+                <a class="btn btn-secondary" href="{{ url_for('tinyurl.specify') }}"
+                   role="button">{{ _('Customize') }}</a>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        function copyFunc() {
+            /* Get the text field */
+            var copyText = document.getElementById("gen_url");
+
+            /* Select the text field */
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+            /* Copy the text inside the text field */
+            document.execCommand("copy");
+
+            /* Alert the copied text */
+            alert("Copied the text: " + copyText.value);
+        }
+    </script>
 {% endblock %}
