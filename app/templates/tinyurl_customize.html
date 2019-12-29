@@ -5,11 +5,8 @@
 {% block body_attribs %} class="customize"{% endblock body_attribs %}
 
 {% block url_form %}
-    <div class="container">
+    <div class="container" style="height:220px">
         <div class="row">
-            <div class="col-xl-9 mx-auto">
-                <h1 class="mb-5 display-1">{{ _('Congrats, here’s your link!') }}</h1>
-            </div>
             <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
                 {{ render_form(form) }}
             </div>

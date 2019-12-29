@@ -9,9 +9,9 @@ from flask_mail import Mail
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from flask_babel import Babel, lazy_gettext as _l
+from flask_redis import FlaskRedis
 from .cache import cache
 from config import Config
-from redis import StrictRedis
 import rq
 
 db = SQLAlchemy()
@@ -23,11 +23,13 @@ mail = Mail()
 bootstrap = Bootstrap()
 moment = Moment()
 babel = Babel()
+redis_client = FlaskRedis(decode_responses=True)
 
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
+    # plugin
     db.init_app(app)
     migrate.init_app(app, db)
     login.init_app(app)
@@ -36,9 +38,10 @@ def create_app(config_class=Config):
     moment.init_app(app)
     babel.init_app(app)
     cache.init_app(app, config=app.config['CACHE_CONFIG'])
-    app.redis = StrictRedis(decode_responses=True).from_url(app.config['REDIS_URL'])
-    app.task_queue = rq.Queue(app.config['WORKER_NAME'], connection=app.redis)
+    redis_client.init_app(app)
+    app.task_queue = rq.Queue(app.config['WORKER_NAME'], connection=redis_client)
 
+    # blueprint
     from app.errors import bp as errors_bp
     app.register_blueprint(errors_bp)
 
