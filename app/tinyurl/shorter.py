@@ -56,10 +56,6 @@ def get_exited_key(long_url):
 
 
 def encode_spec_key(long_url, spec_key):
-    used = Tinyurl.query.filter_by(url_key=spec_key).first()
-    if used:
-        return 'Sorry, this url key is not available anymore'
-
     url_key = get_exited_key(long_url)
     if url_key:
         decode_id = decoder(url_key)

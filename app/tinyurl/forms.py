@@ -16,6 +16,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, Length, ValidationError
 
+from app.models import Tinyurl
+
 
 class UrlForm(FlaskForm):
     url = StringField(_l('Url'),
@@ -27,16 +29,21 @@ class UrlForm(FlaskForm):
 
 
 class SpecKeyForm(FlaskForm):
-    url = StringField(_l('Url'),
+    url = StringField(_l('Your URL'),
                       validators=[DataRequired(),
                                   Length(min=0, max=500)])
-    speckey = StringField(_l('Spec Key'),
+    speckey = StringField(_l('Customise Key'),
                           validators=[DataRequired(),
                                       Length(min=0, max=7)])
-    submit = SubmitField(_l('customize'))
 
     def validate_url(self, url):
         pass
 
     def validate_speckey(self, speckey):
-        pass
+        spec_key = speckey.data
+        if not spec_key.isalnum():
+            raise ValidationError(_('Please only use alphabet or num or their combination'))
+
+        used = Tinyurl.query.filter_by(url_key=spec_key).first()
+        if used:
+            raise ValidationError(_('Sorry, this url key is not available anymore'))
