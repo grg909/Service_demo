@@ -41,7 +41,10 @@ def encode_ran_key(long_url):
         url_key = encode(int(tinyurl.id), charset=app.config['BASE62_CHARSET'])
         tinyurl.url_key = check_set_key(url_key)
         db.session.commit()
-        redis_client.set(long_url, tinyurl.url_key, ex=3600, nx=True)
+        redis_client.set(long_url,
+                         tinyurl.url_key,
+                         ex=app.config['DB_EXPIRE_TIME'],
+                         nx=True)
 
     return '{}/{}'.format(app.config['SERVER_URL_PREFIX'], url_key)
 

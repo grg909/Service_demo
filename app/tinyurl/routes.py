@@ -16,7 +16,7 @@ from . import bp
 from .shorter import encode_ran_key, encode_spec_key
 
 
-@bp.route("/shorten", methods=['GET', 'POST'])
+@bp.route("/tiny", methods=['GET', 'POST'])
 def shorten():
     form = UrlForm()
     if form.validate_on_submit():
@@ -26,7 +26,7 @@ def shorten():
     return render_template('tinyurl.html', form=form)
 
 
-@bp.route("/specify", methods=['GET', 'POST'])
+@bp.route("/spec", methods=['GET', 'POST'])
 def specify():
     form = SpecKeyForm()
     if form.validate_on_submit():

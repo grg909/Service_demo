@@ -7,13 +7,11 @@
 """
 
 """
-from urllib import parse
 
-from flask import current_app as app
 from flask_babel import _
 from flask_babel import lazy_gettext as _l
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField
 from wtforms.validators import DataRequired, Length, ValidationError
 
 from app.models import Tinyurl
@@ -21,8 +19,10 @@ from app.models import Tinyurl
 
 class UrlForm(FlaskForm):
     url = StringField(_l('Url'),
-                      validators=[DataRequired(),
-                                  Length(min=0, max=500)])
+                      validators=[
+                          DataRequired(),
+                          Length(min=0, max=500)
+                      ])
 
     def validate_url(self, url):
         pass
@@ -30,8 +30,10 @@ class UrlForm(FlaskForm):
 
 class SpecKeyForm(FlaskForm):
     url = StringField(_l('Your URL'),
-                      validators=[DataRequired(),
-                                  Length(min=0, max=500)])
+                      validators=[
+                          DataRequired(),
+                          Length(min=0, max=500)
+                      ])
     speckey = StringField(_l('Customise Key'),
                           validators=[DataRequired(),
                                       Length(min=0, max=7)])
