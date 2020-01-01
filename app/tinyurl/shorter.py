@@ -42,8 +42,10 @@ def encode_ran_key(long_url):
         tinyurl.url_key = check_set_key(url_key)
         db.session.commit()
         redis_client.set(long_url, tinyurl.url_key, ex=3600, nx=True)
+    else:
+        url_key = url_key.decode('utf8')
 
-    return '{}/{}'.format(app.config['SERVER_URL_PREFIX'], url_key.decode('utf8'))
+    return '{}/{}'.format(app.config['SERVER_URL_PREFIX'], url_key)
 
 
 def get_exited_key(long_url):

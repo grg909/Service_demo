@@ -44,7 +44,6 @@ def create_app(config_class=Config):
     cache.init_app(app, config=app.config['CACHE_CONFIG'])
     redis_client.init_app(app)
     limiter.init_app(app)
-    limiter.storage_uri = app.config['REDIS_URL']
     Session(app)
     app.task_queue = rq.Queue(app.config['WORKER_NAME'],
                               connection=redis_client)
