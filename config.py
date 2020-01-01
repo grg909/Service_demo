@@ -7,13 +7,17 @@ load_dotenv(os.path.join(basedir, '.env'))
 
 
 class Config():
-    # 密钥设定
+    # session设定
+    SESSION_TYPE = 'redis'
+    SESSION_USE_SIGNER = True
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
+    SESSION_PERMANENT = False
+    PERMANENT_SESSION_LIFETIME = int(os.environ.get('SESSION_LIFETIME') or 604800)
 
     # 数据库配置
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'mysql+pymysql://root:123456@localhost/test'
-        # 'sqlite:///' + os.path.join(basedir, 'app.db')
+    # 'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     REDIS_URL = os.environ.get('REDIS_URL') or 'redis://'
 
@@ -42,8 +46,11 @@ class Config():
     SERVER_URL_PREFIX = os.getenv("SERVER_URL_PREFIX",
                                   "[Put your IP/domain name Here]")
     DB_EXPIRE_TIME = int(os.getenv("DB_EXPIRE_TIME", "3600"))
-    BASE62_CHARSET = os.getenv("BASE62_CHARSET", 'iPFJm70Hxb58t2qSsDhpeCULjIY43QrkTw96lWNZoBOKVXRgaMG1nfuEyvAczd')
+    BASE62_CHARSET = os.getenv(
+        "BASE62_CHARSET",
+        'iPFJm70Hxb58t2qSsDhpeCULjIY43QrkTw96lWNZoBOKVXRgaMG1nfuEyvAczd')
 
+    # flask-caching
     CACHE_CONFIG = {
         'CACHE_TYPE': 'redis',
         'CACHE_KEY_PREFIX': 'url',

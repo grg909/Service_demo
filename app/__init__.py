@@ -10,6 +10,8 @@ from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from flask_babel import Babel, lazy_gettext as _l
 from flask_redis import FlaskRedis
+from flask_session import Session
+from .limiter import limiter
 from .cache import cache
 from config import Config
 import rq
@@ -23,11 +25,13 @@ mail = Mail()
 bootstrap = Bootstrap()
 moment = Moment()
 babel = Babel()
-redis_client = FlaskRedis(decode_responses=True)
+redis_client = FlaskRedis()
+
 
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
+    app.config['SESSION_REDIS'] = redis_client
 
     # plugin
     db.init_app(app)
@@ -39,7 +43,11 @@ def create_app(config_class=Config):
     babel.init_app(app)
     cache.init_app(app, config=app.config['CACHE_CONFIG'])
     redis_client.init_app(app)
-    app.task_queue = rq.Queue(app.config['WORKER_NAME'], connection=redis_client)
+    limiter.init_app(app)
+    limiter.storage_uri = app.config['REDIS_URL']
+    Session(app)
+    app.task_queue = rq.Queue(app.config['WORKER_NAME'],
+                              connection=redis_client)
 
     # blueprint
     from app.errors import bp as errors_bp
@@ -66,8 +74,10 @@ def create_app(config_class=Config):
             mail_handler = SMTPHandler(
                 mailhost=(app.config['MAIL_SERVER'], app.config['MAIL_PORT']),
                 fromaddr='no-reply@' + app.config['MAIL_SERVER'],
-                toaddrs=app.config['ADMINS'], subject='Microblog Failure',
-                credentials=auth, secure=secure)
+                toaddrs=app.config['ADMINS'],
+                subject='Microblog Failure',
+                credentials=auth,
+                secure=secure)
             mail_handler.setLevel(logging.ERROR)
             app.logger.addHandler(mail_handler)
 
@@ -79,10 +89,11 @@ def create_app(config_class=Config):
             if not os.path.exists('logs'):
                 os.mkdir('logs')
             file_handler = RotatingFileHandler('logs/microblog.log',
-                                           maxBytes=10240, backupCount=10)
-            file_handler.setFormatter(logging.Formatter(
-                '%(asctime)s %(levelname)s: %(message)s '
-                '[in %(pathname)s:%(lineno)d]'))
+                                               maxBytes=10240,
+                                               backupCount=10)
+            file_handler.setFormatter(
+                logging.Formatter('%(asctime)s %(levelname)s: %(message)s '
+                                  '[in %(pathname)s:%(lineno)d]'))
             file_handler.setLevel(logging.INFO)
             app.logger.addHandler(file_handler)
 

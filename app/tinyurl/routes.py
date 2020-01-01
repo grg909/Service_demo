@@ -14,9 +14,11 @@ from app.models import Tinyurl
 from app.tinyurl.forms import UrlForm, SpecKeyForm
 from . import bp
 from .shorter import encode_ran_key, encode_spec_key
+from ..limiter import limiter
 
 
 @bp.route("/tiny", methods=['GET', 'POST'])
+@limiter.limit("200/day")
 def shorten():
     form = UrlForm()
     if form.validate_on_submit():
@@ -27,6 +29,7 @@ def shorten():
 
 
 @bp.route("/spec", methods=['GET', 'POST'])
+@limiter.limit("50/day")
 def specify():
     form = SpecKeyForm()
     if form.validate_on_submit():

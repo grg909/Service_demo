@@ -19,10 +19,8 @@ from app.models import Tinyurl
 
 class UrlForm(FlaskForm):
     url = StringField(_l('Url'),
-                      validators=[
-                          DataRequired(),
-                          Length(min=0, max=500)
-                      ])
+                      validators=[DataRequired(),
+                                  Length(min=0, max=500)])
 
     def validate_url(self, url):
         pass
@@ -30,10 +28,8 @@ class UrlForm(FlaskForm):
 
 class SpecKeyForm(FlaskForm):
     url = StringField(_l('Your URL'),
-                      validators=[
-                          DataRequired(),
-                          Length(min=0, max=500)
-                      ])
+                      validators=[DataRequired(),
+                                  Length(min=0, max=500)])
     speckey = StringField(_l('Customise Key'),
                           validators=[DataRequired(),
                                       Length(min=0, max=7)])

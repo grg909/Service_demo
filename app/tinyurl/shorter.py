@@ -41,20 +41,17 @@ def encode_ran_key(long_url):
         url_key = encode(int(tinyurl.id), charset=app.config['BASE62_CHARSET'])
         tinyurl.url_key = check_set_key(url_key)
         db.session.commit()
-        redis_client.set(long_url,
-                         tinyurl.url_key,
-                         ex=app.config['DB_EXPIRE_TIME'],
-                         nx=True)
+        redis_client.set(long_url, tinyurl.url_key, ex=3600, nx=True)
 
-    return '{}/{}'.format(app.config['SERVER_URL_PREFIX'], url_key)
+    return '{}/{}'.format(app.config['SERVER_URL_PREFIX'], url_key.decode('utf8'))
 
 
 def get_exited_key(long_url):
     url_key = redis_client.get(long_url)
     if url_key:
-        return url_key
+        return url_key.decode('utf8')
     else:
-        tinyurl = Tinyurl.query.filter_by(long_url=url_key).first()
+        tinyurl = Tinyurl.query.filter_by(long_url=long_url).first()
         return tinyurl.url_key if tinyurl else None
 
 
