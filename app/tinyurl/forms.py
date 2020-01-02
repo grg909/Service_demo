@@ -40,7 +40,7 @@ class SpecKeyForm(FlaskForm):
     def validate_speckey(self, speckey):
         spec_key = speckey.data
         if not spec_key.isalnum():
-            raise ValidationError(_('Please only use alphabet or num or their combination'))
+            raise ValidationError(_('Please only input valid alphanum or character'))
 
         used = Tinyurl.query.filter_by(url_key=spec_key).first()
         if used:
