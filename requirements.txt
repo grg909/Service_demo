@@ -34,7 +34,7 @@ limits==1.4.1
 Mako==1.0.7
 MarkupSafe==1.1.0
 mmh3==2.5.1
-Pillow==6.2.1
+Pillow==8.1.1
 psycopg2==2.8.4
 pybase62==0.4.3
 pycodestyle==2.5.0
