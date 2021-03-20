@@ -29,7 +29,7 @@ gunicorn==19.9.0
 idna==2.8
 img2pdf==0.3.3
 itsdangerous==1.1.0
-Jinja2==2.10.3
+Jinja2==2.11.3
 limits==1.4.1
 Mako==1.0.7
 MarkupSafe==1.1.0
