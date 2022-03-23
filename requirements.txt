@@ -1,6 +1,6 @@
 alembic==1.0.7
 autopep8==1.4.3
-Babel==2.6.0
+Babel==2.9.1
 blinker==1.4
 Bootstrap-Flask==1.1.0
 certifi==2018.11.29
